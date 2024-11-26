@@ -1,0 +1,25 @@
+name: Test Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: output code
+      uses: actions/checkout@v3
+
+    - name: set Node.js environment
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: install independencies
+      run: npm install
+
+    - name: run test
+      run: npm test
