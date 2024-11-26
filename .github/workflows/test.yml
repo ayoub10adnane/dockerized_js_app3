@@ -9,17 +9,37 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      mongo:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd="mongosh --eval 'db.adminCommand({ ping: 1 })'" 
+          --health-interval=10s 
+          --health-timeout=5s 
+          --health-retries=5
+
     steps:
     - name: output code
       uses: actions/checkout@v3
 
-    - name: set Node.js environment
+    - name: set Node.js env
       uses: actions/setup-node@v3
       with:
         node-version: 16
 
     - name: install independencies
       run: npm install
+
+    - name: wait for MongoDB launching
+      run: |
+        for i in {1..30}; do
+          nc -z localhost 27017 && echo "MongoDB launch successfully" && exit 0
+          echo "wait for MongoDB launch..."
+          sleep 2
+        done
+        exit 1
 
     - name: run test
       run: npm test
