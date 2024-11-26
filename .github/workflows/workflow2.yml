@@ -26,4 +26,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: zhangbolun2/dockerized-js-app:latest
+        tags: ayoub10corleone/dockerized-js-app:latest
